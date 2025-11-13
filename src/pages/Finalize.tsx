@@ -24,6 +24,9 @@ function Finalize() {
     //Bypassar o provider externo e const
     let provider = new DefaultProvider({network: homenetwork});
 
+    // conecta o provider à rede (testnet/mainnet)
+    await provider.connect()
+
     let privateKey = bsv.PrivateKey.fromHex(homepvtKey, homenetwork) 
 
     Alice = new TestWallet(privateKey, provider)
@@ -31,10 +34,6 @@ function Finalize() {
     try {
 
       const signer = Alice
-
-      //Linha necessária nesta versão
-      //O signee deve ser connectado
-      await signer.connect(provider)
 
       let tx = new bsv.Transaction(await getTransaction(txid.current.value, homenetwork));
   
