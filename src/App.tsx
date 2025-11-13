@@ -1,34 +1,36 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { Helloworld } from './contracts/helloWorldBsvContract'
+import { sha256, toByteString } from 'scrypt-ts'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [contract, setContract] = useState<Helloworld | null>(null)
+
+  useEffect(() => {
+    async function init() {
+      // cria a instância do contrato em memória
+      const message = toByteString('hello world', true)
+      const instance = new Helloworld(sha256(message))
+
+      // (opcional) apenas loga o hash do contrato gerado
+      console.log('Contrato instanciado:', instance)
+      setContract(instance)
+    }
+
+    init()
+  }, [])
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div style={{ padding: 20 }}>
+      <h1>BSV HelloWorld PoC</h1>
+      {contract ? (
+        <p>Contrato carregado com sucesso 🎉</p>
+      ) : (
+        <p>Carregando contrato...</p>
+      )}
+    </div>
   )
 }
 
