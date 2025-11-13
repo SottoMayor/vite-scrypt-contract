@@ -1,37 +1,68 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { Helloworld } from './contracts/helloWorldBsvContract'
-import { sha256, toByteString } from 'scrypt-ts'
+import React, { useRef, useState } from 'react';
+import './App.css';
+
+import HomeDeply from "./pages/HomeDeploy"
+import Finalize from './pages/Finalize';
+import UpdateHW from './pages/UpdateHW';
+import ReadData from './pages/ReadData';
+import InsertKey from './pages/InsertKey';
+
 
 function App() {
-  const [contract, setContract] = useState<Helloworld | null>(null)
 
-  useEffect(() => {
-    async function init() {
-      // cria a instância do contrato em memória
-      const message = toByteString('hello world', true)
-      const instance = new Helloworld(sha256(message))
-
-      // (opcional) apenas loga o hash do contrato gerado
-      console.log('Contrato instanciado:', instance)
-      setContract(instance)
-    }
-
-    init()
-  }, [])
+  const [currentPage, setCurrentPage] = useState<string>('deploy');
+  const [showHomeDropdown, setShowHomeDropdown] = useState<boolean>(false);
+  
+  const handlePageChange = (page: string) => {
+    setCurrentPage(page);
+    setShowHomeDropdown(false);  
+  }
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1>BSV HelloWorld PoC</h1>
-      {contract ? (
-        <p>Contrato carregado com sucesso 🎉</p>
-      ) : (
-        <p>Carregando contrato...</p>
-      )}
+    <div className="App">
+
+      <nav className="navbar">
+              <div className="dropdown">
+                <button className="button" 
+                    onClick={() => {setShowHomeDropdown(!showHomeDropdown);}}>
+                  Home
+                </button>
+                {showHomeDropdown && (
+                  <div className="dropdown-content">
+
+                    <button className="dropdown-button" onClick={() => handlePageChange('key')}>
+                      PvtKey
+                    </button>
+
+                    <button className="dropdown-button" onClick={() => handlePageChange('deploy')}>
+                      Deploy
+                    </button>
+
+                    <button className="dropdown-button" onClick={() => handlePageChange('read')}>
+                      Read
+                    </button>
+
+                     <button className="dropdown-button" onClick={() => handlePageChange('update')}>
+                      Update
+                    </button>
+
+                    <button className="dropdown-button" onClick={() => handlePageChange('interact')}>
+                      Finalize
+                    </button>
+
+                  </div>
+
+                )}
+              </div>
+      </nav>          
+      {currentPage === 'key' && <InsertKey/>}
+      {currentPage === 'deploy' && <HomeDeply/>}
+      {currentPage === 'read' && <ReadData/>}
+      {currentPage === 'interact' && <Finalize/>}
+      {currentPage === 'update' && <UpdateHW/>}
+ 
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
