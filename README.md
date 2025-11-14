@@ -9,7 +9,7 @@
       - Porject Name: helloworld (The name is up to you, I cherry picked this just to align with the Scrypt tutorial)
       - Select a Framework = React
       - Select a Variant = Typescript
-- 2. Back to the (Scrypt Doc)[(https://docs.scrypt.io/bsv-docs/how-to-integrate-a-frontend/)] follow the same steps as **Install the sCrypt CLI** and **Load the Contract**
+- 2. Back to the [Scrypt Doc](https://docs.scrypt.io/bsv-docs/how-to-integrate-a-frontend/) follow the same steps as **Install the sCrypt CLI** and **Load the Contract**
    - In the *Load the Contract/Load Artifact* step, notice that the `index.tsx` is, actually, `main.tsx` on Vite.
 
 ## 2. Adjustments to tsconfig Files
